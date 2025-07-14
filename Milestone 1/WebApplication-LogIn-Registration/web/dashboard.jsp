@@ -1,17 +1,24 @@
-<%-- 
-    Document   : dashboard
-    Created on : Jul 14, 2025, 9:20:54 AM
-    Author     : 600947
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>DASHBOARD Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<%
+    HttpSession session = request.getSession(false);
+    if (session == null || session.getAttribute("studentName") == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    String studentName = (String) session.getAttribute("studentName");
+%>
+
+    <h2>Welcome, <%= studentName %>!</h2>
+    <form action="LogoutServlet" method="post">
+        <input type="submit" value="Logout">
+    </form>
+</body>
 </html>
+

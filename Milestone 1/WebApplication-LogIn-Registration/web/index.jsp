@@ -1,17 +1,13 @@
-<%-- 
-    Document   : index
-    Created on : Jul 14, 2025, 9:18:07 AM
-    Author     : 600947
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>INDEX PAGE</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+<head>
+    <title>BC Wellness Portal</title>
+</head>
+<body>
+    <h1>Welcome to the BC Student Wellness System</h1>
+    <p><a href="register.jsp">Register</a></p>
+    <p><a href="login.jsp">Login</a></p>
+</body>
 </html>
+
