@@ -142,7 +142,7 @@ public class RegisterServlet extends HttpServlet {
         // <editor-fold defaultstate="collapsed" desc="post method + connect">
         try {
 
-            try (Connection conn = conf.utils.Database_connection.getconnection()) {
+            try (Connection conn = utils.Database_connection.getconnection()) {
 
                 String checkQuery = "SELECT 1 FROM users WHERE email = ? OR student_number = ?";
                 try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
