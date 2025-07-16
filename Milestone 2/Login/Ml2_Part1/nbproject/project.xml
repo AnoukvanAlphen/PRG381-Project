@@ -3,11 +3,9 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-<<<<<<<< Updated upstream:Milestone 2/WelnessSystem/nbproject/project.xml
-            <name>WelnessSystem</name>
-========
+
             <name>login-001</name>
->>>>>>>> Stashed changes:Milestone 2/Login/Ml2_Part1/nbproject/project.xml
+
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
