@@ -60,7 +60,6 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
         String studentNumber = request.getParameter("student_number");
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
@@ -187,7 +186,7 @@ public class RegisterServlet extends HttpServlet {
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
-    
+
 }
 
 // </editor-fold>
