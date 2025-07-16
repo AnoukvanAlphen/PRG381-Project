@@ -85,6 +85,3 @@ public class LoginServlet extends HttpServlet {
     }// </editor-fold>
 
 }
-
-//to verify password: BCrypt.checkpw(inputPassword, storedHashedPassword)
-
