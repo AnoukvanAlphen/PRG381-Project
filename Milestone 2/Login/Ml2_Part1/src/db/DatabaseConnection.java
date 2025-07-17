@@ -23,13 +23,22 @@ public class DatabaseConnection {
             
             connectToDatabase();
             //dropAppointmentsTable();
-            
+            //dropCounsellorsTable();
             //createUsers();
-            //createAppointmentsTable();
             //createCounselorTable();
+            //createAppointmentsTable();
             //createFeedbackTable();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+    public void dropCounsellorsTable(){
+        try{
+            String sql="Drop TABLE counselors";
+              connection.createStatement().execute(sql);
+        System.out.println("Counsellor table dropped.");
+        }catch (SQLException e) {
+        System.out.println("Drop failed: " + e.getMessage());
         }
     }
     public void dropAppointmentsTable(){

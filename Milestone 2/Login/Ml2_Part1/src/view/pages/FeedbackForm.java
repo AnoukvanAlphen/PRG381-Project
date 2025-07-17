@@ -538,7 +538,7 @@ public class FeedbackForm extends javax.swing.JFrame {
     Connection con = db.DatabaseConnection.getInstance().getConnection();
     int feedbackId = Integer.parseInt(tblFeedback.getValueAt(selectedRow, 0).toString());
 
-    String sql = "UPDATE feedback SET name = ?, surname = ?, email = ?, rating = ?, comments = ? WHERE feedback_id = ?";
+    String sql = "UPDATE feedback SET name = ?, surname = ?, email = ?, rating = ?, comments = ? WHERE id = ?";
     java.sql.PreparedStatement stmt = con.prepareStatement(sql);
 
     stmt.setString(1, name);
