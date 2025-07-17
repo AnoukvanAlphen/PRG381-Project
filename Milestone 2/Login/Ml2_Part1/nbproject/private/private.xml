@@ -3,14 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/view/component/PanelCover.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/controller/service/ServiceMail.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/controller/service/ServiceUser.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/db/DatabaseConnection.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/model/ModelLogin.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/model/ModelMessage.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/model/ModelUser.java</file>
-            <file>file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/login-001/src/view/component/Message.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/pages/AppointmentsForm.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/pages/CounselorForm.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/pages/FeedbackForm.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/db/DatabaseConnection.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/model/ModelLogin.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/model/ModelMessage.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/model/ModelUser.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/component/PanelLoading.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/component/PanelLoginAndRegister.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/component/PanelCover.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/component/Message.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/component/PanelVerifyCode.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/view/main/Main.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/controller/service/ServiceMail.java</file>
+            <file>file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/controller/service/ServiceUser.java</file>
         </group>
     </open-files>
 </project-private>

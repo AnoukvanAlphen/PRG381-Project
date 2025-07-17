@@ -154,6 +154,7 @@ public class Main extends javax.swing.JFrame {
                 sendMain(user);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             showMessage(Message.MessageType.ERROR, "Error Register");
         }
     }
@@ -170,6 +171,7 @@ public class Main extends javax.swing.JFrame {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
             showMessage(Message.MessageType.ERROR, "Error Login");
         }
     }
