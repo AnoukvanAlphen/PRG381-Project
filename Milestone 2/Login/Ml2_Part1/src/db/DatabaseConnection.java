@@ -20,18 +20,51 @@ public class DatabaseConnection {
 
     private DatabaseConnection() {
         try {
+            
             connectToDatabase();
-            createAppointmentsTable();
-            createCounselorTable();
-            createFeedbackTable();
+            
+            //createUsers();
+            //createAppointmentsTable();
+            //createCounselorTable();
+            //createFeedbackTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    public void dropUsersTable() {
+    try {
+        String sql = "DROP TABLE users";
+        connection.createStatement().execute(sql);
+        System.out.println("Users table dropped.");
+    } catch (SQLException e) {
+        System.out.println("Drop failed: " + e.getMessage());
+    }
+}
+   public void createUsers() {
+    try {
+        String sql = "CREATE TABLE users (" +
+                     "userid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
+                     "name VARCHAR(50), " +
+                     "surname VARCHAR(50), " +
+                     "email VARCHAR(100), " +
+                     "username VARCHAR(50), " +
+                     "password VARCHAR(50), " +
+                     "verifycode VARCHAR(10), " +   // <-- COMMA here!
+                     "verified BOOLEAN)";            // <-- Final column
+        connection.createStatement().execute(sql);
+        System.out.println("Users table created.");
+    } catch (SQLException e) {
+        if (e.getSQLState().equals("X0Y32")) {
+            System.out.println("Users table already exists.");
+        } else {
+            e.printStackTrace();
+        }
+    }
+}
 
     public void connectToDatabase() throws SQLException {
         
-        String url = "jdbc:derby://localhost:1527/WellnessDB;create=true";
+        String url = "jdbc:derby:WellnessDB;create=true";
         String username = "app";
         String password = "app";
         
