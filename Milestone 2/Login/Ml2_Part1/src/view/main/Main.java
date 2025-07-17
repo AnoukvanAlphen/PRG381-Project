@@ -1,5 +1,6 @@
 package view.main;
 
+
 import view.component.Message;
 import view.component.PanelCover;
 import view.component.PanelLoading;
@@ -159,22 +160,24 @@ public class Main extends javax.swing.JFrame {
         }
     }
 
-    private void login() {
-        ModelLogin data = loginAndRegister.getDataLogin();
-        try {
-            ModelUser user = service.login(data);
-            if (user != null) {
-                this.dispose();
-                MainSystem.main(user);
-            } else {
-                showMessage(Message.MessageType.ERROR, "Email and Password incorrect");
-            }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showMessage(Message.MessageType.ERROR, "Error Login");
+   private void login() {
+    ModelLogin data = loginAndRegister.getDataLogin();
+    try {
+        ModelUser user = service.login(data);
+        if (user != null) {
+            this.dispose();
+            new dash.main.Main(user).setVisible(true); 
+        } else {
+            showMessage(Message.MessageType.ERROR, "Email and Password incorrect");
+
         }
+
+    } catch (SQLException e) {
+        showMessage(Message.MessageType.ERROR, "Error Login");
     }
+}
+
 
     private void sendMain(ModelUser user) {
         new Thread(new Runnable() {
@@ -322,6 +325,9 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
+    
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;

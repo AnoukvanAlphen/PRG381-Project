@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package view.pages;
 
 import java.sql.Connection;
@@ -14,17 +11,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author bosma
- */
+
 public class AppointmentsForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentsForm.class.getName());
 
-    /**
-     * Creates new form AppointmentsForm
-     */
+ 
     public AppointmentsForm() {
         initComponents();
         loadCounselorsIntoComboBox();
@@ -34,6 +26,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
     }
 });
     }
+    
     private void populateFormFromSelectedRow() {
     int selectedRow = tblAppointments.getSelectedRow();
     if (selectedRow == -1) return;
@@ -201,7 +194,6 @@ public class AppointmentsForm extends javax.swing.JFrame {
 
         btnCancel.setText("Cancel Appointment");
         btnCancel.setToolTipText("");
-        btnCancel.setActionCommand("Cancel Appointment");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -350,6 +342,10 @@ public class AppointmentsForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+   
+
+    
     private void loadAppointmentsTable() {
     try {
         Connection con = db.DatabaseConnection.getInstance().getConnection();
