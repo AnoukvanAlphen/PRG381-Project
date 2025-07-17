@@ -62,7 +62,9 @@ public class Main extends javax.swing.JFrame {
                     setForm(form1);
                 } else if (index == 3) {
                     setForm(form3);
-               } else if (index == 5) { // 🚪 Logout option
+               } else if (index == 4) {
+                    System.exit(0);
+               }else if (index == 5) { // 🚪 Logout option
             dispose(); // Close the LoginMain window
             new view.main.LoginMain().setVisible(true); // Go back to login
         }

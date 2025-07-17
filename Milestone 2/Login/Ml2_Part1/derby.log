@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Thu Jul 17 23:01:43 SAST 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0198-1a31-6bf3-00000725ade0 
+Thu Jul 17 23:13:16 SAST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0198-1a3b-fbab-000007231f40 
 on database directory C:\Users\nicho\OneDrive\Documents\Uni\BELGIUM CAMPUS\3rd Year\PRG381\PRG381-Project\Milestone 2\Login\Ml2_Part1\WellnessDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@70dea4e 
 Loaded from file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/lib/derby.jar
 java.vendor=Oracle Corporation
