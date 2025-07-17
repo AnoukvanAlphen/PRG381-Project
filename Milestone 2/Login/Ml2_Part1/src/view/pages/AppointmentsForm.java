@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,16 +19,6 @@ public class AppointmentsForm extends javax.swing.JFrame {
  
     public AppointmentsForm() {
         initComponents();
-        loadCounselorsIntoComboBox();
-        loadCounselorsIntoComboBox();
-        
-        
-        this.addWindowFocusListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowGainedFocus(java.awt.event.WindowEvent evt) {
-            loadCounselorsIntoComboBox();
-        }
-    });
         loadCounselorsIntoComboBox();
         tblAppointments.getSelectionModel().addListSelectionListener(event -> {
     if (!event.getValueIsAdjusting() && tblAppointments.getSelectedRow() != -1) {
@@ -294,7 +283,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
                             .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -310,7 +299,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -348,7 +337,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -415,27 +404,30 @@ public class AppointmentsForm extends javax.swing.JFrame {
     String counselor = (String) cmbCounselor.getSelectedItem();
 
     if (name.isEmpty() || surname.isEmpty() || date.isEmpty() || timeInput.isEmpty() || counselor == null || counselor.trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill in all the fields", "Missing information", JOptionPane.WARNING_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all the fields", "Missing information", javax.swing.JOptionPane.WARNING_MESSAGE);
         return;
     }
 
+    // Name and surname validation
     if (!name.matches("[A-Z][a-zA-Z]*")) {
-        JOptionPane.showMessageDialog(this, "Name must start with a capital letter and contain only letters.", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Name must start with a capital letter and contain only letters.", "Invalid Name", javax.swing.JOptionPane.ERROR_MESSAGE);
         return;
     }
 
     if (!surname.matches("[A-Z][a-zA-Z]*")) {
-        JOptionPane.showMessageDialog(this, "Surname must start with a capital letter and contain only letters.", "Invalid Surname", JOptionPane.ERROR_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Surname must start with a capital letter and contain only letters.", "Invalid Surname", javax.swing.JOptionPane.ERROR_MESSAGE);
         return;
     }
 
+    // Date format
     if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
-        JOptionPane.showMessageDialog(this, "Please enter the date in YYYY-MM-DD format", "Invalid Date", JOptionPane.ERROR_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Please enter the date in YYYY-MM-DD format", "Invalid Date", javax.swing.JOptionPane.ERROR_MESSAGE);
         return;
     }
 
+    // Time format
     if (!timeInput.matches("\\d{2}:\\d{2}")) {
-        JOptionPane.showMessageDialog(this, "Please enter time in HH:MM format", "Invalid Time", JOptionPane.ERROR_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Please enter time in HH:MM format", "Invalid Time", javax.swing.JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -450,81 +442,29 @@ public class AppointmentsForm extends javax.swing.JFrame {
         return;
     }
 
-    LocalDate appointmentDate;
-    LocalTime appointmentTime;
     try {
-        appointmentDate = LocalDate.parse(date);
-        appointmentTime = LocalTime.parse(timeInput);
-        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+        java.time.LocalDate appointmentDate = java.time.LocalDate.parse(date);
+        java.time.LocalTime appointmentTime = java.time.LocalTime.parse(timeInput);
+        java.time.LocalDateTime appointmentDateTime = java.time.LocalDateTime.of(appointmentDate, appointmentTime);
 
-        if (appointmentDateTime.isBefore(LocalDateTime.now())) {
-            JOptionPane.showMessageDialog(this, "You cannot book an appointment in the past.", "Invalid Appointment Time", JOptionPane.ERROR_MESSAGE);
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+
+        if (appointmentDateTime.isBefore(now)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "You cannot book an appointment in the past.", "Invalid Appointment Time", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
-    } catch (DateTimeParseException e) {
-        JOptionPane.showMessageDialog(this, "Invalid date or time format.", "Parse Error", JOptionPane.ERROR_MESSAGE);
+    } catch (java.time.format.DateTimeParseException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Invalid date or time format.", "Parse Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    // Append :00 if needed
+    // Append :00 to time if needed
     timeInput += ":00";
 
-    //AVAILABILITY VALIDATION
     try {
         Connection con = db.DatabaseConnection.getInstance().getConnection();
 
-        String[] counselorNameParts = counselor.split(" ");
-        String firstName = counselorNameParts[0];
-        String lastName = counselorNameParts[1];
-
-        String getAvailabilitySql = "SELECT availability FROM counselors WHERE name = ? AND surname = ?";
-        PreparedStatement availabilityStmt = con.prepareStatement(getAvailabilitySql);
-        availabilityStmt.setString(1, firstName);
-        availabilityStmt.setString(2, lastName);
-        ResultSet availabilityRs = availabilityStmt.executeQuery();
-
-        if (availabilityRs.next()) {
-            String availability = availabilityRs.getString("availability");
-            DayOfWeek day = appointmentDate.getDayOfWeek();
-
-            switch (availability) {
-                case "Available on weekdays only":
-                    if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
-                        JOptionPane.showMessageDialog(this, "This counselor is only available on weekdays.", "Unavailable", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    break;
-                case "Unavailable":
-                    JOptionPane.showMessageDialog(this, "This counselor is currently unavailable.", "Unavailable", JOptionPane.ERROR_MESSAGE);
-                    return;
-                case "Only available in the mornings":
-                    if (appointmentTime.isBefore(LocalTime.of(8, 0)) || appointmentTime.isAfter(LocalTime.of(11, 59))) {
-                        JOptionPane.showMessageDialog(this, "This counselor is only available in the mornings (08:00–11:59).", "Unavailable", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    break;
-                case "Only in the afternoons":
-                    if (appointmentTime.isBefore(LocalTime.of(12, 0)) || appointmentTime.isAfter(LocalTime.of(17, 0))) {
-                        JOptionPane.showMessageDialog(this, "This counselor is only available in the afternoons (12:00–17:00).", "Unavailable", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    break;
-                case "Always available":
-                    // No restrictions
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(this, "Unknown availability status.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Counselor availability not found.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        availabilityStmt.close();
-
-        //DUPLICATE APPOINTMENT CHECK
+        //Check for existing appointment for same counselor, date & time
         String checkSql = "SELECT COUNT(*) FROM appointments WHERE counselor = ? AND date = ? AND time = ?";
         PreparedStatement checkStmt = con.prepareStatement(checkSql);
         checkStmt.setString(1, counselor);
@@ -533,12 +473,13 @@ public class AppointmentsForm extends javax.swing.JFrame {
         ResultSet rs = checkStmt.executeQuery();
 
         if (rs.next() && rs.getInt(1) > 0) {
-            JOptionPane.showMessageDialog(this, "This counselor already has an appointment at that time.", "Duplicate Appointment", JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "This counselor already has an appointment at that time.", "Duplicate Appointment", javax.swing.JOptionPane.WARNING_MESSAGE);
+            checkStmt.close();
             return;
         }
         checkStmt.close();
 
-        //INSERT APPOINTMENT
+        // Proceed to insert
         String sql = "INSERT INTO appointments (name, surname, counselor, date, time, status) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, name);
@@ -550,13 +491,14 @@ public class AppointmentsForm extends javax.swing.JFrame {
         stmt.executeUpdate();
         stmt.close();
 
-        JOptionPane.showMessageDialog(this, "Appointment booked successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        loadAppointmentsTable();
-
+        javax.swing.JOptionPane.showMessageDialog(this, "Appointment booked successfully!", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error booking appointment: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Error booking appointment: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
+
+    loadAppointmentsTable(); // Refresh table
+        
     }//GEN-LAST:event_btnBookActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
