@@ -12,12 +12,19 @@
             <h2>Sign-up</h2>
 
             <!-- Server-side validation message -->
-            <c:if test="${not empty message}">
-                <div class="error-message">${message}</div>
+            <c:choose>
+                <c:when test="${not empty message}">
+                    <div class="error-message">${message}</div>
+                </c:when>
+                <c:when test="${not empty success}">
+                    <div class="success-message">${success}</div>
+                </c:when>
+            </c:choose>
+
+            <c:if test="${not empty registrationSuccess}">
+                <div class="success-message">${registrationSuccess}</div>
             </c:if>
-            <c:if test="${not empty message}">
-                <div class="success-message">${message}</div>
-            </c:if>
+
 
 
             <form action="RegisterServlet" method="post" autocomplete="off" id="registerForm">
