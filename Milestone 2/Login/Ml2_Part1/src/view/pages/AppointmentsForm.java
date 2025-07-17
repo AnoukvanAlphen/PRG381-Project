@@ -667,55 +667,37 @@ public class AppointmentsForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-         int selectedRow = tblAppointments.getSelectedRow();
+     int selectedRow = tblAppointments.getSelectedRow();
 
     if (selectedRow == -1) {
         JOptionPane.showMessageDialog(this, "Please select an appointment to update.", "No Selection", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
-    // Get status first
     String currentStatus = (String) tblAppointments.getValueAt(selectedRow, 5);
     if ("Cancelled".equalsIgnoreCase(currentStatus)) {
         JOptionPane.showMessageDialog(this, "You cannot update a cancelled appointment.", "Invalid Operation", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
-    // Get updated values
     String name = txtName.getText().trim();
     String surname = txtSurname.getText().trim();
     String date = txtDate.getText().trim();
     String timeInput = txtTime.getText().trim();
     String counselor = (String) cmbCounselor.getSelectedItem();
 
-    // Validate fields
     if (name.isEmpty() || surname.isEmpty() || date.isEmpty() || timeInput.isEmpty() || counselor == null || counselor.trim().isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please fill in all the fields", "Missing Information", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
-    if (!name.matches("[A-Z][a-zA-Z]*")) {
-        JOptionPane.showMessageDialog(this, "Name must start with a capital letter and contain only letters.", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+    if (!name.matches("[A-Z][a-zA-Z]*") || !surname.matches("[A-Z][a-zA-Z]*")) {
+        JOptionPane.showMessageDialog(this, "Name and Surname must start with a capital letter and contain only letters.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    if (!surname.matches("[A-Z][a-zA-Z]*")) {
-        JOptionPane.showMessageDialog(this, "Surname must start with a capital letter and contain only letters.", "Invalid Surname", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
-        JOptionPane.showMessageDialog(this, "Please enter the date in YYYY-MM-DD format", "Invalid Date", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (!timeInput.matches("\\d{2}:\\d{2}")) {
-        JOptionPane.showMessageDialog(this, "Please enter time in HH:MM format", "Invalid Time", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (!timeInput.endsWith(":00")) {
-        JOptionPane.showMessageDialog(this, "Appointments can only be booked on the hour (e.g., 14:00)", "Invalid Time Slot", JOptionPane.ERROR_MESSAGE);
+    if (!date.matches("\\d{4}-\\d{2}-\\d{2}") || !timeInput.matches("\\d{2}:\\d{2}") || !timeInput.endsWith(":00")) {
+        JOptionPane.showMessageDialog(this, "Invalid date/time format. Use YYYY-MM-DD and HH:MM (on the hour).", "Format Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -725,13 +707,12 @@ public class AppointmentsForm extends javax.swing.JFrame {
         return;
     }
 
+    LocalDate appointmentDate;
+    LocalTime appointmentTime;
     try {
-        LocalDate appointmentDate = LocalDate.parse(date);
-        LocalTime appointmentTime = LocalTime.parse(timeInput);
-        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
-        LocalDateTime now = LocalDateTime.now();
-
-        if (appointmentDateTime.isBefore(now)) {
+        appointmentDate = LocalDate.parse(date);
+        appointmentTime = LocalTime.parse(timeInput);
+        if (LocalDateTime.of(appointmentDate, appointmentTime).isBefore(LocalDateTime.now())) {
             JOptionPane.showMessageDialog(this, "You cannot update to a time in the past.", "Invalid Time", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -740,19 +721,64 @@ public class AppointmentsForm extends javax.swing.JFrame {
         return;
     }
 
-    timeInput += ":00"; // For DB
+    timeInput += ":00"; // normalize for SQL
 
     try {
         Connection con = db.DatabaseConnection.getInstance().getConnection();
 
-        // Get current values from selected row (to identify the original record)
+        // Validate availability
+        String[] counselorNameParts = counselor.split(" ");
+        String firstName = counselorNameParts[0];
+        String lastName = counselorNameParts[1];
+
+        String getAvailabilitySql = "SELECT availability FROM counselors WHERE name = ? AND surname = ?";
+        PreparedStatement availabilityStmt = con.prepareStatement(getAvailabilitySql);
+        availabilityStmt.setString(1, firstName);
+        availabilityStmt.setString(2, lastName);
+        ResultSet availabilityRs = availabilityStmt.executeQuery();
+
+        if (availabilityRs.next()) {
+            String availability = availabilityRs.getString("availability");
+            DayOfWeek day = appointmentDate.getDayOfWeek();
+
+            switch (availability) {
+                case "Available on weekdays only":
+                    if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
+                        JOptionPane.showMessageDialog(this, "This counselor is only available on weekdays.", "Unavailable", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    break;
+                case "Unavailable":
+                    JOptionPane.showMessageDialog(this, "This counselor is currently unavailable.", "Unavailable", JOptionPane.ERROR_MESSAGE);
+                    return;
+                case "Only available in the mornings":
+                    if (appointmentTime.isBefore(LocalTime.of(8, 0)) || appointmentTime.isAfter(LocalTime.of(11, 59))) {
+                        JOptionPane.showMessageDialog(this, "This counselor is only available in the mornings (08:00–11:59).", "Unavailable", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    break;
+                case "Only in the afternoons":
+                    if (appointmentTime.isBefore(LocalTime.of(12, 0)) || appointmentTime.isAfter(LocalTime.of(17, 0))) {
+                        JOptionPane.showMessageDialog(this, "This counselor is only available in the afternoons (12:00–17:00).", "Unavailable", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    break;
+                case "Always available":
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Unknown availability status.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+        }
+        availabilityStmt.close();
+
+        // Check for conflict with existing appointments
         String oldName = (String) tblAppointments.getValueAt(selectedRow, 0);
         String oldSurname = (String) tblAppointments.getValueAt(selectedRow, 1);
         String oldCounselor = (String) tblAppointments.getValueAt(selectedRow, 2);
         String oldDate = (String) tblAppointments.getValueAt(selectedRow, 3);
         String oldTime = (String) tblAppointments.getValueAt(selectedRow, 4);
 
-        //Check for duplicate appointment for same counselor, date, time (excluding current one)
         String checkSql = "SELECT COUNT(*) FROM appointments WHERE counselor = ? AND date = ? AND time = ? " +
                           "AND NOT (name = ? AND surname = ? AND counselor = ? AND date = ? AND time = ?)";
         PreparedStatement checkStmt = con.prepareStatement(checkSql);
@@ -764,8 +790,8 @@ public class AppointmentsForm extends javax.swing.JFrame {
         checkStmt.setString(6, oldCounselor);
         checkStmt.setDate(7, java.sql.Date.valueOf(oldDate));
         checkStmt.setTime(8, java.sql.Time.valueOf(oldTime));
-
         ResultSet rs = checkStmt.executeQuery();
+
         if (rs.next() && rs.getInt(1) > 0) {
             JOptionPane.showMessageDialog(this, "This counselor already has an appointment at that time.", "Conflict", JOptionPane.WARNING_MESSAGE);
             checkStmt.close();
@@ -773,8 +799,9 @@ public class AppointmentsForm extends javax.swing.JFrame {
         }
         checkStmt.close();
 
-        // Update
-        String updateSql = "UPDATE appointments SET name = ?, surname = ?, counselor = ?, date = ?, time = ? WHERE name = ? AND surname = ? AND counselor = ? AND date = ? AND time = ?";
+        // Update appointment
+        String updateSql = "UPDATE appointments SET name = ?, surname = ?, counselor = ?, date = ?, time = ? " +
+                           "WHERE name = ? AND surname = ? AND counselor = ? AND date = ? AND time = ?";
         PreparedStatement stmt = con.prepareStatement(updateSql);
         stmt.setString(1, name);
         stmt.setString(2, surname);
@@ -792,7 +819,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
 
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(this, "Appointment updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            loadAppointmentsTable(); // Refresh
+            loadAppointmentsTable();
         } else {
             JOptionPane.showMessageDialog(this, "Failed to update appointment.", "Error", JOptionPane.ERROR_MESSAGE);
         }
