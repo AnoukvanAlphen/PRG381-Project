@@ -4,24 +4,30 @@
 <head>
     <title>Login</title>
 </head>
+<link rel="stylesheet" href="css/login.css">
+
 <body>
-    <h2>Student Login</h2>
-    
-    <% String error = request.getParameter("error");
-       if ("invalid".equals(error)) { %>
-        <p style="color:red;">Invalid email or password. Please try again.</p>
-    <% } %>
-    
-    <form action="LoginServlet" method="post">
-        <label>Email:</label><br/>
-        <input type="email" name="email" required><br/><br/>
-        
-        <label>Password:</label><br/>
-        <input type="password" name="password" required><br/><br/>
-        
-        <input type="submit" value="Login">
-    </form>
-    
-    <p><a href="index.jsp">Back to Home</a></p>
+    <div class="login-container">
+        <h2>Student Login</h2>
+
+        <% String error = request.getParameter("error");
+           if ("invalid".equals(error)) { %>
+            <p class="error-message">Invalid email or password. Please try again.</p>
+        <% } %>
+
+        <form action="LoginServlet" method="post">
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Log in</button>
+
+        </form>
+
+        <p><a href="index.jsp">Back to Home</a></p>
+    </div>
 </body>
+
 </html>
