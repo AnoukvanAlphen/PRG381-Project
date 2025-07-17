@@ -73,7 +73,12 @@ public class RegisterServlet extends HttpServlet {
                 || email == null || email.isEmpty()
                 || password == null || password.isEmpty()) {
             request.setAttribute("message", "Please fill in all required fields");
+            request.setAttribute("prevStudentNumber", studentNumber);
+            request.setAttribute("prevName", name);
+            request.setAttribute("prevSurname", surname);
+            request.setAttribute("prevEmail", email);
             request.getRequestDispatcher("register.jsp").forward(request, response);
+
             return;
 
         }
@@ -85,7 +90,9 @@ public class RegisterServlet extends HttpServlet {
 
         if (email_matcher.matches() == false) {
             request.setAttribute("message", "please enter a valid email");
+            request.setAttribute("prevEmail", email);
             request.getRequestDispatcher("register.jsp").forward(request, response);
+
             return;
         }
 
@@ -133,6 +140,7 @@ public class RegisterServlet extends HttpServlet {
         Matcher phone_matcher = phone_pattern.matcher(phone);
         if (phone_matcher.matches() == false) {
             request.setAttribute("message", "please enter a valid phone number");
+            request.setAttribute("prevPhone", phone);
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
