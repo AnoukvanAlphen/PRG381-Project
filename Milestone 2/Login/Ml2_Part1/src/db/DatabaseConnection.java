@@ -22,6 +22,7 @@ public class DatabaseConnection {
         try {
             
             connectToDatabase();
+            //dropAppointmentsTable();
             
             //createUsers();
             //createAppointmentsTable();
@@ -30,6 +31,15 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public void dropAppointmentsTable(){
+        try{
+            String sql="Drop TABLE appointments";
+             connection.createStatement().execute(sql);
+        System.out.println("Appointments table dropped.");
+        }catch (SQLException e) {
+        System.out.println("Drop failed: " + e.getMessage());
+    }
     }
     public void dropUsersTable() {
     try {
@@ -79,7 +89,8 @@ public class DatabaseConnection {
                      "surname VARCHAR(50), " +
                      "counselor VARCHAR(50), " +
                      "date DATE, " +
-                     "time TIME)";
+                     "time TIME,"+
+                     "status varchar(15))";
         connection.createStatement().execute(sql);
         System.out.println("Appointments table created.");
     } catch (SQLException e) {
