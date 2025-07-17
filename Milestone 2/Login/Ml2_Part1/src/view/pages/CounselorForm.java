@@ -38,9 +38,10 @@ public class CounselorForm extends javax.swing.JFrame {
         cmbAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(
         new String[] {
             "Available on weekdays only",
-            "Available by appointment only",
             "Unavailable",
-            "Only available in the mornings"
+            "Only available in the mornings",
+            "Only in the afternoons",
+            "Always available"
         }
         ));
         

@@ -41,7 +41,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
    menu = new view.dash.component.Menu();
 
-    // ✅ Add menu to layout properly
+    //Add menu to layout properly
     getContentPane().setLayout(new java.awt.BorderLayout()); // override default layout
     getContentPane().add(menu, java.awt.BorderLayout.WEST);
     getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);

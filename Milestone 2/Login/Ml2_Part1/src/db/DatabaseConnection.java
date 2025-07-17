@@ -25,7 +25,7 @@ public class DatabaseConnection {
             //dropAppointmentsTable();
             //dropCounsellorsTable();
             //createUsers();
-            //createCounselorTable();
+            createCounselorTable();
             //createAppointmentsTable();
             //createFeedbackTable();
         } catch (SQLException e) {
@@ -114,11 +114,11 @@ public class DatabaseConnection {
     public void createCounselorTable(){
         try{
              String sql = "CREATE TABLE counselors (" +
-                     "id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
-                     "name VARCHAR(50), " +
-                     "surname VARCHAR(50), " +
-                     "specialization VARCHAR(60), " +
-                     "availability VARCHAR(50))";
+             "id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
+             "name VARCHAR(50), " +
+             "surname VARCHAR(50), " +
+             "specialization VARCHAR(60), " +
+             "availability VARCHAR(50))";
         connection.createStatement().execute(sql);
         System.out.println("Counselors table created.");
         }catch(SQLException e){
