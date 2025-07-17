@@ -179,8 +179,9 @@ public class RegisterServlet extends HttpServlet {
                     int rowsInserted = insertStmt.executeUpdate();
 
                     if (rowsInserted > 0) {
-                        request.setAttribute("message", "Registration successful! You can now log in.");
-                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        request.setAttribute("registrationSuccess", "Registration successful! You can now log in.");
+                        request.getRequestDispatcher("register.jsp").forward(request, response);
+
                     } else {
                         request.setAttribute("message", "Registration failed. Please try again.");
                         request.getRequestDispatcher("register.jsp").forward(request, response);
