@@ -7,7 +7,7 @@ package dash.main;
 
 import controller.event.EventMenuSelected;
 import view.pages.AppointmentsPanel;
-
+import view.main.LoginMain;
 import view.pages.CouncelorPanel;
 import view.pages.FeedbackPanel;
 import dash.form.Form_Home;
@@ -24,7 +24,7 @@ import model.ModelUser;
 public class Main extends javax.swing.JFrame {
 
     /**
-     * Creates new form Main
+     * Creates new form LoginMain
      */
     private view.dash.component.Menu menu;
 
@@ -62,7 +62,10 @@ public class Main extends javax.swing.JFrame {
                     setForm(form1);
                 } else if (index == 3) {
                     setForm(form3);
-               }
+               } else if (index == 5) { // 🚪 Logout option
+            dispose(); // Close the LoginMain window
+            new view.main.LoginMain().setVisible(true); // Go back to login
+        }
             }
         });
         //  set when system open start with home form
@@ -131,20 +134,20 @@ public class Main extends javax.swing.JFrame {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(LoginMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(LoginMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(LoginMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(LoginMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new Main().setVisible(true);
+//                new LoginMain().setVisible(true);
 //            }
 //        });
 //    }

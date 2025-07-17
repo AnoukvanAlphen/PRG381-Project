@@ -1,12 +1,12 @@
 ----------------------------------------------------------------
-Thu Jul 17 22:31:55 SAST 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0198-1a16-23bf-00000ece2e40 
-on database directory C:\Users\bosma\Documents\GitHub\PRG381-Project\Milestone 2\Login\Ml2_Part1\WellnessDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@11a4022a 
-Loaded from file:/C:/Users/bosma/Documents/GitHub/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/lib/derby.jar
+Thu Jul 17 23:01:43 SAST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0198-1a31-6bf3-00000725ade0 
+on database directory C:\Users\nicho\OneDrive\Documents\Uni\BELGIUM CAMPUS\3rd Year\PRG381\PRG381-Project\Milestone 2\Login\Ml2_Part1\WellnessDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@70dea4e 
+Loaded from file:/C:/Users/nicho/OneDrive/Documents/Uni/BELGIUM%20CAMPUS/3rd%20Year/PRG381/PRG381-Project/Milestone%202/Login/Ml2_Part1/src/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=24.0.1+9-30
-user.dir=C:\Users\bosma\Documents\GitHub\PRG381-Project\Milestone 2\Login\Ml2_Part1
-os.name=Windows 11
+java.runtime.version=21.0.7+8-LTS-245
+user.dir=C:\Users\nicho\OneDrive\Documents\Uni\BELGIUM CAMPUS\3rd Year\PRG381\PRG381-Project\Milestone 2\Login\Ml2_Part1
+os.name=Windows 10
 os.arch=amd64
 os.version=10.0
 derby.system.home=null
