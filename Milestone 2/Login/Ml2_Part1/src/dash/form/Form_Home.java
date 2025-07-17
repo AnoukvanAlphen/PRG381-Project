@@ -65,20 +65,20 @@ public class Form_Home extends javax.swing.JPanel {
             // Check availability constraints
             switch (availability) {
                 case "Unavailable":
-                    return StatusType.BOOKED;
+                    return StatusType.UNAVAILABLE;
                 case "Available on weekdays only":
                     if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY || now.isBefore(LocalTime.of(8, 0)) || now.isAfter(LocalTime.of(17, 0))) {
-                    return StatusType.BOOKED;
+                    return StatusType.UNAVAILABLE;
                     }
                     break;
                 case "Only available in the mornings":
                     if (now.isBefore(LocalTime.of(8, 0)) || now.isAfter(LocalTime.of(11, 59))) {
-                        return StatusType.BOOKED;
+                        return StatusType.UNAVAILABLE;
                     }
                     break;
                 case "Only in the afternoons":
                     if (now.isBefore(LocalTime.of(12, 0)) || now.isAfter(LocalTime.of(17, 0))) {
-                        return StatusType.BOOKED;
+                        return StatusType.UNAVAILABLE;
                     }
                     break;
                 // "Always available" falls through
@@ -98,7 +98,7 @@ public class Form_Home extends javax.swing.JPanel {
                 if (!now.isBefore(appointmentTime) && now.isBefore(endTime)) {
                     rs.close();
                     stmt.close();
-                    return StatusType.BOOKED;
+                    return StatusType.UNAVAILABLE;
                 }
             }
 
