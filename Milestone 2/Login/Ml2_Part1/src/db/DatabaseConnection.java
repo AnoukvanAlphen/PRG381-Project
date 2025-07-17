@@ -23,6 +23,7 @@ public class DatabaseConnection {
             connectToDatabase();
             createAppointmentsTable();
             createCounselorTable();
+            createFeedbackTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,6 +76,25 @@ public class DatabaseConnection {
             
     }
         }
+    }
+    public void createFeedbackTable() {
+    try {
+        String sql = "CREATE TABLE feedback (" +
+                     "id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
+                     "name VARCHAR(50), " +
+                     "surname VARCHAR(50), " +
+                     "email VARCHAR(100), " +
+                     "rating VARCHAR(20), " +
+                     "comments VARCHAR(500))";
+        connection.createStatement().execute(sql);
+        System.out.println("Feedback table created.");
+    } catch (SQLException e) {
+        if (e.getSQLState().equals("X0Y32")) {
+            System.out.println("Feedback table already exists.");
+        } else {
+            e.printStackTrace();
+        }
+    }
     }
 
     public Connection getConnection() {
