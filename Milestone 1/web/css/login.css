@@ -1,0 +1,89 @@
+.login-container {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 25px 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fefefe;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Page heading */
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Labels */
+.login-container label {
+    font-weight: 600;
+    color: #555;
+}
+
+/* Input fields */
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 5px;
+    margin-bottom: 18px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.login-container input[type="email"]:focus,
+.login-container input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* log in button */
+.login-container button,
+.login-container input[type="submit"] {
+    width: 100%;
+    background-color: #263238;
+    color: #fff;
+    padding: 12px 0;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover,
+.login-container input[type="submit"]:hover {
+    background-color: #1c1f21;
+}
+
+
+/* Error message styling */
+.error-message, p[style*="color:red"] {
+    color: #d9534f; 
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.login-container p {
+    text-align: center;
+    margin-top: 15px;
+}
+
+/*back to home link*/
+.login-container a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 600;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}

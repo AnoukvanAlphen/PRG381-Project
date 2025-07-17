@@ -3,11 +3,15 @@
 <html>
 <head>
     <title>BC Wellness Portal</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <h1>Welcome to the BC Student Wellness System</h1>
-    <p><a href="register.jsp">Register</a></p>
-    <p><a href="login.jsp">Login</a></p>
+    <div class="container">
+        <h1>Welcome to the BC Student Wellness System</h1>
+        <div class="links">
+            <a href="register.jsp" class="btn">Register</a>
+            <a href="login.jsp" class="btn">Login</a>
+        </div>
+    </div>
 </body>
 </html>
-
