@@ -435,8 +435,8 @@ public class AppointmentsForm extends javax.swing.JFrame {
     }
 
     int hour = Integer.parseInt(timeInput.split(":")[0]);
-    if (hour < 8 || hour > 17) {
-        JOptionPane.showMessageDialog(this, "Appointment time must be between 08:00 and 17:00", "Out of Working Hours", JOptionPane.ERROR_MESSAGE);
+    if (hour < 0 || hour > 23) {
+        JOptionPane.showMessageDialog(this, "Appointment time must be between 00:00 and 23:00", "Out of Working Hours", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -536,7 +536,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
         stmt.setString(3, counselor);
         stmt.setDate(4, java.sql.Date.valueOf(date));
         stmt.setTime(5, java.sql.Time.valueOf(timeInput));
-        stmt.setString(6, "Pending");
+        stmt.setString(6, "Booked");
         stmt.executeUpdate();
         stmt.close();
 
@@ -702,7 +702,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
     }
 
     int hour = Integer.parseInt(timeInput.split(":")[0]);
-    if (hour < 8 || hour > 17) {
+    if (hour < 0 || hour > 23) {
         JOptionPane.showMessageDialog(this, "Appointment time must be between 08:00 and 17:00", "Out of Working Hours", JOptionPane.ERROR_MESSAGE);
         return;
     }
@@ -800,7 +800,7 @@ public class AppointmentsForm extends javax.swing.JFrame {
         checkStmt.close();
 
         // Update appointment
-        String updateSql = "UPDATE appointments SET name = ?, surname = ?, counselor = ?, date = ?, time = ? " +
+        String updateSql = "UPDATE appointments SET name = ?, surname = ?, counselor = ?, date = ?, time = ? ,status= ? " +
                            "WHERE name = ? AND surname = ? AND counselor = ? AND date = ? AND time = ?";
         PreparedStatement stmt = con.prepareStatement(updateSql);
         stmt.setString(1, name);
@@ -808,11 +808,12 @@ public class AppointmentsForm extends javax.swing.JFrame {
         stmt.setString(3, counselor);
         stmt.setDate(4, java.sql.Date.valueOf(date));
         stmt.setTime(5, java.sql.Time.valueOf(timeInput));
-        stmt.setString(6, oldName);
-        stmt.setString(7, oldSurname);
-        stmt.setString(8, oldCounselor);
-        stmt.setDate(9, java.sql.Date.valueOf(oldDate));
-        stmt.setTime(10, java.sql.Time.valueOf(oldTime));
+        stmt.setString(6, "Booked");
+        stmt.setString(7, oldName);
+        stmt.setString(8, oldSurname);
+        stmt.setString(9, oldCounselor);
+        stmt.setDate(10, java.sql.Date.valueOf(oldDate));
+        stmt.setTime(11, java.sql.Time.valueOf(oldTime));
 
         int rowsAffected = stmt.executeUpdate();
         stmt.close();
