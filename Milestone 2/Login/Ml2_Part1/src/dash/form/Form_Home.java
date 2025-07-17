@@ -4,6 +4,13 @@ import dash.model.Model_Card;
 import dash.model.StatusType;
 import view.dash.swing.ScrollBar;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,28 +22,95 @@ public class Form_Home extends javax.swing.JPanel {
         card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/resources/icon/mail.png")), "Appointments", "Book your sessions", ""));
         card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/resources/icon/8.png")), "Councelers", "Checkout our councelers", ""));
         card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/resources/icon/flag.png")), "Feedback", "Give us feedback", ""));
-        //  add row table
-        spTable.setVerticalScrollBar(new ScrollBar());
+    spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
         JPanel p = new JPanel();
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        table.addRow(new Object[]{"Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
-        table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
-        table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.AVALIABLE});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.BOOKED});
+
+        loadCounselors();
     }
+
+    private void loadCounselors() {
+        try {
+            Connection con = db.DatabaseConnection.getInstance().getConnection();
+            String sql = "SELECT name, surname, specialization, availability FROM counselors";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            LocalDate today = LocalDate.now();
+            LocalTime now = LocalTime.now();
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                String specialization = rs.getString("specialization");
+                String availability = rs.getString("availability");
+                StatusType status = determineStatus(con, name, surname, availability, today, now);
+
+                table.addRow(new Object[]{name, surname, specialization, availability, status});
+            }
+
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private StatusType determineStatus(Connection con, String name, String surname, String availability, LocalDate today, LocalTime now) {
+        try {
+            DayOfWeek day = today.getDayOfWeek();
+
+            // Check availability constraints
+            switch (availability) {
+                case "Unavailable":
+                    return StatusType.BOOKED;
+                case "Available on weekdays only":
+                    if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY || now.isBefore(LocalTime.of(8, 0)) || now.isAfter(LocalTime.of(17, 0))) {
+                    return StatusType.BOOKED;
+                    }
+                    break;
+                case "Only available in the mornings":
+                    if (now.isBefore(LocalTime.of(8, 0)) || now.isAfter(LocalTime.of(11, 59))) {
+                        return StatusType.BOOKED;
+                    }
+                    break;
+                case "Only in the afternoons":
+                    if (now.isBefore(LocalTime.of(12, 0)) || now.isAfter(LocalTime.of(17, 0))) {
+                        return StatusType.BOOKED;
+                    }
+                    break;
+                // "Always available" falls through
+            }
+
+            // Check if counselor is booked now
+            String fullName = name + " " + surname;
+            String checkSql = "SELECT time FROM appointments WHERE counselor = ? AND date = ?";
+            PreparedStatement stmt = con.prepareStatement(checkSql);
+            stmt.setString(1, fullName);
+            stmt.setDate(2, java.sql.Date.valueOf(today));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                LocalTime appointmentTime = rs.getTime("time").toLocalTime();
+                LocalTime endTime = appointmentTime.plusHours(1);
+                if (!now.isBefore(appointmentTime) && now.isBefore(endTime)) {
+                    rs.close();
+                    stmt.close();
+                    return StatusType.BOOKED;
+                }
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return StatusType.AVALIABLE;
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -78,7 +152,7 @@ public class Form_Home extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Name", "Email", "Speaciality", "Avaliability", "Status"
+                "Name", "Surname", "Speaciality", "Avaliability", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
